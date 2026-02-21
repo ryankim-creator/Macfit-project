@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('user_image')->nullable();
             $table->unsignedBigInteger('role_id');
 
-            $table->unsignedBigInteger('role_id')->default('user_id');
+            $table->unsignedBigInteger('role_id');
 
             $table->foreign('role_id')->references('id')->on('roles');
         });
