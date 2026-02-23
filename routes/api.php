@@ -10,12 +10,19 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\VerifyEmailController;
 use App\Models\Equipment;
 use Illuminate\Container\Attributes\Auth;
 
 // public routes
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
+
+// email verification
+// Route::post('/email/verify/{id}/{hash}',[VerifyEmailController::class, 'verify'])
+//         ->name('verification.verify')
+//         ->middleware('signed', 'throtle5,1');
+        
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {

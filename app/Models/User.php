@@ -55,11 +55,21 @@ class User extends Authenticatable
     }
 
 public function abilities(){
+    $role = $this->role()->first();
+
+    if (!$role){
+        return [
+            'admin' => false,
+            'user' => false,
+            'trainer' => false,
+            'admin' => false,
+        ];
+    }
         return[
-          'admin' => $this->role ->id == 1,
-          'user' => $this->role ->id == 2,
-          'trainer' => $this->role ->id == 3,
-          'staff' => $this->role ->id == 4,
+          'admin' => $role->id == 1,
+          'user' => $role ->id == 2,
+          'trainer' => $role ->id == 3,
+          'staff' => $role ->id == 4,
         ];
 }
 }
