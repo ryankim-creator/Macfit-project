@@ -18,12 +18,17 @@ class AuthController extends Controller
         'user_image' => 'nullable|image|route:jpeg,png,jpg'
     ]);
 
-    $role = Role::where('name','User')->first();
+    if($request->hasFile('role_id')){
+       $role_id = $request->role_id;     
+    } else{
+        $role = Role::where('name','User')->first();
+        $role_id =$role->id;
+    }   
 
     $user = new User();
     $user->name = $validated['name'];
     $user->email = $validated['email'];
-    $user->role_id = $role->id;
+    $user->role_id = $role_id;
     $user->is_active = true;
     $user->password = Hash::make($validated['password']);
 
@@ -71,7 +76,7 @@ class AuthController extends Controller
         'abilities' => $user->abilities(),
     ], 200);
    }
-  }
+  }  
 
   public function logout(Request $request){
     $request->user()->currentAccessToken()->delete();
