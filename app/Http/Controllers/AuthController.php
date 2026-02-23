@@ -59,16 +59,16 @@ class AuthController extends Controller
 
     if(!$user || !Hash::check($validated['password'], $user->password)){
     throw \Illuminate\Validation\ValidationException::withMessages([
-            'error' => 'Invalid Credentials'], 401);
+            'error' => 'Invalid Credentials',
+    ], 401);
 
 
     $token = $user->createToken('auth-token')->plainTextToken;
-
     return response()->json([        
         'Message' => 'Login Successful!',
         'token' => $token,
         'user' => $user,
-        'abilities' => $user->abilities,
+        'abilities' => $user->abilities(),
     ], 200);
    }
   }
