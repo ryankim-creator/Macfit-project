@@ -13,7 +13,7 @@ class AuthController extends Controller
    public function register(Request $request){
     $validated = $request->validate([
         'name' => 'required|string|max:40',
-        'email' => 'required|email|unique:users,email',
+        'email' => 'required|string|email|unique:users',
         'password' => 'required|string|min:4|max:15|confirmed',
         'user_image' => 'nullable|image|mimes:jpeg,png,jpg'
     ]);
@@ -60,18 +60,21 @@ class AuthController extends Controller
         'password' => 'required|string|min:4|max:15'
     ]);
 
+    try{
     $user = User::where('email', $validated['email'])->first();
 
     if(!$user || !Hash::check($validated['password'], $user->password)){
     throw ValidationException::withMessages([
             'email' => ['Invalid Credentials'],
     ]);
-
+    }
+        
     if(!$user->is_active){
         return response()->json([
             'message'=>'Your account is not active.Please verify your account.'
         ]);
     }
+    
 
     $token = $user->createToken('auth-token')->plainTextToken;
     return response()->json([        
@@ -81,10 +84,18 @@ class AuthController extends Controller
         'abilities' => $user->abilities(),
     ], 200);
    }
+    catch (\Exception $exception){
+        return response()->json([
+            'Error' => 'Invalid Credentials.'
+        ], 500);
+    }
   }  
+  
 
   public function logout(Request $request){
     $request->user()->currentAccessToken()->delete();
-    return response()->json('Logout Successful.');
+    return response()->json([
+        'message' => 'Logout Successful.'
+        ]);
   }
 }

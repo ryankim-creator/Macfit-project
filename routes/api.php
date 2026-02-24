@@ -13,15 +13,18 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\VerifyEmailController;
 use App\Models\Equipment;
 use Illuminate\Container\Attributes\Auth;
+use App\Http\Controllers\ResendEmailVerificationController;
 
 // public routes
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
 
 // email verification
-// Route::post('/email/verify/{id}/{hash}',[VerifyEmailController::class, 'verify'])
-//         ->name('verification.verify')
-//         ->middleware('signed', 'throtle5,1');
+Route::post('/email/verify/{id}/{hash}',[VerifyEmailController::class, 'verify'])
+        ->name('verification.verify')
+        ->middleware(['signed', 'throttle6:1']);
+// Route::post('/email/Resend',[ResendEmailVerificationController::class, 'resend'])
+//         ->middleware(['signed', 'throttle6:1']);
         
 
 // Protected routes
