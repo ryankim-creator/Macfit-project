@@ -12,8 +12,8 @@ class BundleController extends Controller
             'name' => 'required|string',
             'start_time' => 'required',
             'duration' => 'required',
-            'description' => 'string|max:1000',
-            'category_id' => 'integer|exists:category,id'
+            'description' => 'required|string|max:1000',
+            'category_id' => 'required|integer|exists:category,id'
         ]);
 
         $bundle = new Bundle();
@@ -26,7 +26,10 @@ class BundleController extends Controller
 
         try{
             $bundle->save();
-            return response()->json($bundle);
+            return response()->json([
+                'message' => 'Bundle saved successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -73,21 +76,27 @@ class BundleController extends Controller
     }
 
     public function updateBundle(Request $request, $id){       
-        $validate=$request->validate ([
+        $validated=$request->validate ([
             'name' => 'required|string',
             'start_time' => 'required',
             'duration' => 'required',
             'description' => 'string|max:1000',
             'category_id' => 'integer|exists:categories,id'
         ]);
-        try{
+        
         $bundle = Bundle::findOrFail($id);       
-        $bundle->name = $validate['name'];
-        $bundle->start_time= $validate['start_time'];
-        $bundle->duration = $validate['duration'];
-        $bundle->description = $validate['description'];
-        $bundle->category_id = $validate['category_id'];
-    }
+        $bundle->name = $validated['name'];
+        $bundle->start_time= $validated['start_time'];
+        $bundle->duration = $validated['duration'];
+        $bundle->description = $validated['description'];
+        $bundle->category_id = $validated['category_id'];
+    
+        try{
+            $bundle->save();
+            return response()->json([
+                'message'=>'Bundle Updated Successfully.'
+            ], 200);
+        }
      catch(\Exception $exception){
             return response()->json([
                 'error'=>'Failed to fetch Bundles',

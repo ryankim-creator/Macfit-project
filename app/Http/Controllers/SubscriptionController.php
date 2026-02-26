@@ -19,7 +19,10 @@ class SubscriptionController extends Controller
 
         try{
             $subscription->save();
-            return response()->json($subscription);
+            return response()->json([
+                'message' => 'Subscription saved successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -57,15 +60,20 @@ class SubscriptionController extends Controller
     }
 
     public function updateSubscription(Request $request, $id){       
-        $validate=$request->validate ([
+        $validated=$request->validate ([
              'user_id' => 'required|string',
             'bundle_id' => 'required|string', 
         ]);
-        try{
+      
         $subscription=Subscription::findOrFail($id);        
-        $subscription->user_id = $validate['user_id'];       
-        $subscription->bundle_id = $validate['bundle_id'];     
-    }
+        $subscription->user_id = $validated['user_id'];       
+        $subscription->bundle_id = $validated['bundle_id'];     
+     try{
+            $subscription->save();
+            return response()->json([
+                'message'=>'Bundle Updated Successfully.'
+            ], 200);
+        }
      catch(\Exception $exception){
             return response()->json([
                 'error'=>'Failed to fetch Subscriptions',

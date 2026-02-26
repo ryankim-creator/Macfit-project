@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
+    // CRUD FUNCTIONS
+    // Create
     public function createRole(Request $request){
         $validated = $request->validate ([
             'name' => 'required|string|unique:roles,name',
@@ -20,7 +22,10 @@ class RoleController extends Controller
 
         try{
             $role->save();
-            return response()->json($role);
+            return response()->json([
+                'message' => 'Role saved successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -58,20 +63,23 @@ class RoleController extends Controller
     }
 
     public function updateRole(Request $request, $id){       
-        $validate=$request->validate ([
+        $validated=$request->validate ([
             'name'=>'required|string|unique:roles,name',
             'description'=>'nullable|string|max:1000',
         ]);
-        try{
-            $existingRole =Role::findOrFail($id);
-
-        $existingrole = new Role();
-        $existingrole->name = $validate['name'];
-        $existingrole-> description->name = $validate['description'];
-    }
+        
+        $role =Role::findOrFail($id);       
+        $role->name = $validated['name'];
+        $role-> description->name = $validated['description'];
+     try{
+            $role->save();
+            return response()->json([
+                'message'=>'Bundle Updated Successfully.'
+            ], 200);
+        }
      catch(\Exception $exception){
             return response()->json([
-                'error'=>'Failed to fetch Roles',
+                'error'=>'Failed to update Role',
                 'message'=>$exception->getMessage()
             ]);
      }

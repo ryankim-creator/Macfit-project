@@ -9,26 +9,28 @@ use Illuminate\Http\Request;
 class VerifyEmailController extends Controller
 {
    public function verify(Request $request, $id, $hash){
-    $User = User::findOrfail('id', $id);
+    $User = User::findOrFail($id);
 
     if(!hash_equals((string) $hash, sha1($User->email))){
         return response()->json([
             'message'=>'Invalid Verification Link'
         ], 403);    
         
-        if ($user->hasVerifiedEmail()){
+        if ($User->hasVerifiedEmail()){
             return response()->json([
                 'message'=>'Email is already verified.'
             ], 200);
         }
         
-        $User->markEmailAskVerified();
+        $User->markEmailAsVerified();
         event(new Verified($User));
 
         $User->is_active = 1;
         $User->save();
-        return response()->json('Email Verified Succesfully!');
+        return response()->json([
+            'message' => 'Email Verified Succesfully!'
 
+   ]);
    }
 }
 }

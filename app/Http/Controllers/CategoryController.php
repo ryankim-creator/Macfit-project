@@ -19,7 +19,10 @@ class CategoryController extends Controller
 
         try{
             $role->save();
-            return response()->json($role);
+            return response()->json([
+                'message' => 'Category saved successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -57,16 +60,21 @@ class CategoryController extends Controller
     }
 
     public function updateCategory(Request $request, $id){       
-        $validate=$request->validate ([
+        $validated=$request->validate ([
             'name'=>'required|string|unique:roles,name',
             'description'=>'nullable|string|max:1000',
         ]);
+       
+        $Category = Category::findOrFail($id);       
+        $Category->name = $validated['name'];
+        $Category-> description->name = $validated['description'];
+  
         try{
-        $existingCategory = Category::findOrFail($id);
-        $existingCategory = new Category();
-        $existingCategory->name = $validate['name'];
-        $existingCategory-> description->name = $validate['description'];
-    }
+            $Category->save();
+            return response()->json([
+                'message'=>'Bundle Updated Successfully.'
+            ], 200);
+        }
      catch(\Exception $exception){
             return response()->json([
                 'error'=>'Failed to fetch Categories',

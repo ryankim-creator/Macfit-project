@@ -23,7 +23,10 @@ class GymController extends Controller
 
         try{
             $gym->save();
-            return response()->json($gym);
+            return response()->json([
+                'message' => 'Gym saved successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -37,7 +40,10 @@ class GymController extends Controller
     public function readAllGyms(){
         try{
             $gyms = Gym::all();
-            return response()->json($gyms);
+            return response()->json([
+                'message' => 'Gym fetched successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -50,7 +56,10 @@ class GymController extends Controller
     public function readGym($id){
         try{
             $gym=Gym::findOrFail($id);
-            return response()->json($gym);
+            return response()->json([
+                'message' => 'Gym fetched successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -61,19 +70,26 @@ class GymController extends Controller
     }
 
     public function updateGym(Request $request, $id){       
-        $validate=$request->validate ([
+        $validated=$request->validate ([
             'name' => 'required|string',
             'longitude' => 'required|string',
             'latitude' => 'required|string',
             'description' => 'string|max:1000',
         ]);
-        try{
+        
         $gym=Gym::findOrFail($id);        
-        $gym->name = $validate['name'];       
-        $gym->longitude = $validate['longitude'];
-        $gym->latitude = $validate['latitude'];        
-        $gym-> description->name = $validate['description'];
-    }
+        $gym->name = $validated['name'];       
+        $gym->longitude = $validated['longitude'];
+        $gym->latitude = $validated['latitude'];        
+        $gym-> description->name = $validated['description'];
+         try{
+            $gym->save();
+            return response()->json([
+                'message' => 'Gym updated successfully'
+            
+            ],200);
+        }
+    
      catch(\Exception $exception){
             return response()->json([
                 'error'=>'Failed to fetch Gyms',

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\VerifyEmailNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class ResendEmailController extends Controller
 {
@@ -13,35 +15,33 @@ class ResendEmailController extends Controller
 
         ]);
 
-        $User = User::where('email', $request->email->first());
+        $User = User::where('email', $request->email)->first();
 
         if(!$User){
             return response()->json([
                 'message'=> 'User not found'
-            ])
+            ]);
 
         if($User->hasVerifiedEmail()){
             return response()->json([
                 'message'=>'Email is already verified'
-            ], 201)
+            ], 201);
         }
 
-        $signedUrl = Url::temporarySignedRoute{
-            'verification.verify',
+        $signedUrl = URL::temporarySignedRoute(
+           'verification.verify',
             now()->addMinutes(60),
             [
-                'id'=>$User->id,
-                'hash'=>shal($User->email)
+                'id' => $User->id,
+                'hash' => sha1($User->email)
 
-            ]
-            );
+            ]);        
 
-            $User->notifynew VerifyEmailNotification($signedUrl);
+            $User->notify(new VerifyEmailNotification($signedUrl));
 
-            return response()->json[
+            return response()->json([
                 'message'=>'Verification Email reset successful'
-            ]
+            ]);
         }
-        }
-    }
+        }    
 }

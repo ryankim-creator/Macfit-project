@@ -15,7 +15,8 @@ class AuthController extends Controller
         'name' => 'required|string|max:40',
         'email' => 'required|string|email|unique:users',
         'password' => 'required|string|min:4|max:15|confirmed',
-        'user_image' => 'nullable|image|mimes:jpeg,png,jpg'
+        'user_image' => 'nullable|string|max:225|mimes:jpeg,png,jpg',        
+        'role_id' => 'required|integer|exists:roles,id',
     ]);
 
     if($request->has('role_id')){
@@ -28,8 +29,7 @@ class AuthController extends Controller
     $user = new User();
     $user->name = $validated['name'];
     $user->email = $validated['email'];
-    $user->role_id = $role_id;
-    $user->is_active = true;
+    $user->role_id = $validated['role_id'];  
     $user->password = Hash::make($validated['password']);
 
     if($request->hasFile('user_image')){
@@ -50,7 +50,7 @@ class AuthController extends Controller
             return response()->json([
                 'error' => 'Failed to register user',
                 'message'=>$exception->getMessage()
-            ]);
+            ], 500);
     } 
    }   
 

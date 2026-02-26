@@ -25,7 +25,10 @@ class EquipmentController extends Controller
 
         try{
             $equipment->save();
-            return response()->json($equipment);
+            return response()->json([
+                'message' => 'Equipment saved successfully'
+            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -39,7 +42,9 @@ class EquipmentController extends Controller
     public function readAllEquipments(){
         try{
             $equipments = Equipment::all();
-            return response()->json($equipments);
+            return response()->json([
+                'message' => 'Equipment fetched'            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -52,7 +57,9 @@ class EquipmentController extends Controller
     public function readEquipment($id){
         try{
             $equipment=Equipment::findOrFail($id);
-            return response()->json($equipment);
+            return response()->json([
+                'message' => 'Equipment fetched'            
+            ],200);
         }
         catch(\Exception $exception){
             return response()->json([
@@ -63,21 +70,28 @@ class EquipmentController extends Controller
     }
 
     public function updateEquipment(Request $request, $id){       
-        $validate=$request->validate ([
+        $validated=$request->validate ([
             'name' => 'required|string',
             'usage' => 'required|string',
             'model_no' => 'required|string',
             'value' => 'required|string',
             'status' => 'required|string',
         ]);
-        try{
+        
         $equipment=Equipment::findOrFail($id);        
-        $equipment->name = $validate['name'];       
-        $equipment->usage = $validate['usage'];
-        $equipment->model_no = $validate['model_no'];        
-        $equipment->value = $validate['value'];
-        $equipment->status = $validate['status'];
-    }
+        $equipment->name = $validated['name'];       
+        $equipment->usage = $validated['usage'];
+        $equipment->model_no = $validated['model_no'];        
+        $equipment->value = $validated['value'];
+        $equipment->status = $validated['status'];
+        try{
+            $equipment->save();
+            return response()->json([
+                'message' => 'Equipment updated successfully'
+            
+            ],200);
+        }
+    
      catch(\Exception $exception){
             return response()->json([
                 'error'=>'Failed to fetch Equipments',
