@@ -29,6 +29,8 @@ use App\Http\Controllers\ResendEmailController;
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
+
+        Route::get('/userInfo',[AuthController::class, 'userInfo']); 
         
         Route::post('/logout',[AuthController::class, 'logout']);
 

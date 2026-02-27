@@ -9,9 +9,11 @@ class SubscriptionController extends Controller
 {
          public function createSubscription(Request $request){
         $validated = $request->validate ([
-            'user_id' => 'required|string',
-            'bundle_id' => 'required|string',           
+         
+            'bundle_id' => 'required|string|exists:bundles,id',           
         ]);
+
+        // $userId = auth()->user()->id;
 
         $subscription = new Subscription();
         $subscription->user_id = $validated['user_id'];
@@ -36,6 +38,8 @@ class SubscriptionController extends Controller
     public function readAllSubscriptions(){
         try{
             $subscriptions = Subscription::all();
+            // $subscriptions = Subscription::join('users,subscription,user_id''=''users_id')
+            // ->join('bundles')
             return response()->json($subscriptions);
         }
         catch(\Exception $exception){
@@ -61,8 +65,8 @@ class SubscriptionController extends Controller
 
     public function updateSubscription(Request $request, $id){       
         $validated=$request->validate ([
-             'user_id' => 'required|string',
-            'bundle_id' => 'required|string', 
+          'user_id' => 'required|integer|exists:users,id',
+          'bundle_id' => 'required|string|exists:bundles,id', 
         ]);
       
         $subscription=Subscription::findOrFail($id);        
@@ -98,4 +102,8 @@ class SubscriptionController extends Controller
             ]);
         }
 }
+
+// public function getUserChargers(){
+//     $userId = auth 
+// }
 }

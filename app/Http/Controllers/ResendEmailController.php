@@ -15,14 +15,14 @@ class ResendEmailController extends Controller
 
         ]);
 
-        $User = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
-        if(!$User){
+        if(!$user){
             return response()->json([
                 'message'=> 'User not found'
             ]);
 
-        if($User->hasVerifiedEmail()){
+        if($user->hasVerifiedEmail()){
             return response()->json([
                 'message'=>'Email is already verified'
             ], 201);
@@ -32,12 +32,12 @@ class ResendEmailController extends Controller
            'verification.verify',
             now()->addMinutes(60),
             [
-                'id' => $User->id,
-                'hash' => sha1($User->email)
+                'id' => $user->id,
+                'hash' => sha1($user->email)
 
             ]);        
 
-            $User->notify(new VerifyEmailNotification($signedUrl));
+            $user->notify(new VerifyEmailNotification($signedUrl));
 
             return response()->json([
                 'message'=>'Verification Email reset successful'
