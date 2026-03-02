@@ -14,10 +14,12 @@ use App\Http\Controllers\VerifyEmailController;
 use App\Models\Equipment;
 use Illuminate\Container\Attributes\Auth;
 use App\Http\Controllers\ResendEmailController;
+use App\Http\Controllers\UserOtpController;
 
 // public routes
         Route::post('/register',[AuthController::class, 'register']);
         Route::post('/login',[AuthController::class, 'login']);
+        Route::post('/verify-otp',[UserOtpController::class, 'verifyOtp']);
 
 // email verification
         Route::get('/email/verify/{id}/{hash}',[VerifyEmailController::class, 'verify'])

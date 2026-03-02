@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OtpMail;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserOtp;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 
@@ -89,14 +92,21 @@ class AuthController extends Controller
             'message'=>'Your account is not active.Please verify your account.'
         ], 400);
     }
-    
 
-    $token = $user->createToken('auth-token')->plainTextToken;
-    return response()->json([        
-        'Message' => 'Login Successful!',
-        'token' => $token,
-        'user' => $user,       
-    ], 200);
+    $otp = rand(100000, 999999);
+    $expiresAt = now()->addMinutes(5);
+
+    UserOtp::updateOrCreate([
+        'user_id'=>$user->id,
+        'otp'=>$otp,
+        'expires_at'=>$expiresAt
+    ]);
+
+    Mail::to($user->email)->send(new OtpMail($otp));
+
+    return response()->json([
+            'message'=>'OTP sent to your email.Please verify to complete login.'
+        ], 200);
    }   
 
   public function logout(Request $request){
