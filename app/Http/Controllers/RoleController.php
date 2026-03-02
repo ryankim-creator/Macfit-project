@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleController extends Controller
 {
+
+    public function _construct(){
+        $this->authorizeResource(Role::class);
+    }
+
     // CRUD FUNCTIONS
     // Create
     public function createRole(Request $request){
@@ -36,7 +41,10 @@ class RoleController extends Controller
         
     } 
 
-    public function readAllRoles(){
+    public function readAllRoles(){  
+
+        $this->authorize(Role::class, 'viewAny');
+
         try{
             $roles = Role::all();
             return response()->json($roles);

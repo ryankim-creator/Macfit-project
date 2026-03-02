@@ -20,7 +20,7 @@ use App\Http\Controllers\ResendEmailController;
         Route::post('/login',[AuthController::class, 'login']);
 
 // email verification
-        Route::post('/email/verify/{id}/{hash}',[VerifyEmailController::class, 'verify'])
+        Route::get('/email/verify/{id}/{hash}',[VerifyEmailController::class, 'verify'])
                 ->name('verification.verify')
                 ->middleware(['signed', 'throttle:6,1']);
         Route::post('/email/Resend',[ResendEmailController::class, 'resend'])
