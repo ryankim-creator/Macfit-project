@@ -22,6 +22,10 @@ class AuthController extends Controller
         'password' => 'required|string|min:4|max:15',
         'user_image' => 'nullable|mimes:jpeg,png,jpg',        
         'role_id' => 'required|integer|exists:roles,id',
+        'phoneNumber' => 'nullable|string',
+        'gender' => 'nullable|string',
+        'dob' => 'nullable|string',
+        'gymLocation' => 'nullable|string',
     ]);
 
     if($request->has('role_id')){
@@ -34,7 +38,11 @@ class AuthController extends Controller
     $user = new User();
     $user->name = $validated['name'];
     $user->email = $validated['email'];
-    $user->role_id = $validated['role_id'];  
+    $user->role_id = $validated['role_id']; 
+    $user->phoneNumber = $validated['phoneNumber'];
+    $user->gender = $validated['gender'];
+    $user->dob = $validated['dob']; 
+    $user->gymLocation = $validated['gymLocation'];
     $user->password = Hash::make($validated['password']);
     $user->is_active = true;  //to delete later
 
