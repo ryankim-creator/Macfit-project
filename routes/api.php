@@ -15,6 +15,7 @@ use App\Models\Equipment;
 use Illuminate\Container\Attributes\Auth;
 use App\Http\Controllers\ResendEmailController;
 use App\Http\Controllers\UserOtpController;
+use App\Http\Controllers\UserController;
 
 // public routes
         Route::post('/register',[AuthController::class, 'register']);
@@ -74,5 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/getSubscription/{id}', [SubscriptionController::class, 'readSubscription']);
         Route::post('/updateSubscription/{id}', [SubscriptionController::class, 'updateSubscription']);
         Route::delete('/deleteSubscription/{id}', [SubscriptionController::class, 'deleteSubscription']);
+
+        Route::resource('users', UserController::class);
 
 });
