@@ -77,7 +77,30 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+         $validated = $request->validate([
+            'name'=>'required|string',
+            'email'=>'required|email',
+            'phoneNumber'=>'nullable|string',
+            'gender'=>'nullable|string',
+            'dob'=>'nullable|string',
+            'gymLocation'=>'nullable|string',
+            'role_id'=>'required|integer|exists:roles,id',
+        ]);
+
+        $user = User::find($id);
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->password = Hash::make('Qwerty1234');
+        $user->role_id = $validated['role_id'];
+        $user->phoneNumber = $validated['phoneNumber'];
+        $user->gender = $validated['gender'];
+        $user->dob = $validated['dob'];
+        $user->gymLocation = $validated['gymLocation'];
+        $user->is_active = true; //to delete later after email verification
+
+        $user->save();
+
+        return response()->json(['message' => 'User updated Successfully.'], 200);
     }
 
     /**

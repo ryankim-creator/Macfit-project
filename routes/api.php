@@ -40,9 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/saveRole', [RoleController::class, 'createRole']);
         Route::get('/getAllRoles', [RoleController::class, 'readAllRoles']);
-        Route::get('/getRoles/{id}', [RoleController::class, 'readRoles']);
-        Route::post('/updateRoles/{id}', [RoleController::class, 'updateRoles']);
-        Route::delete('/deleteRoles/{id}', [RoleController::class, 'deleteRoles']);
+        Route::get('/getRole/{id}', [RoleController::class, 'readRole']);
+        Route::post('/updateRole/{id}', [RoleController::class, 'updateRole']);
+        Route::delete('/deleteRole/{id}', [RoleController::class, 'deleteRole']);
 
 
         Route::post('/saveCategory', [CategoryController::class, 'createCategory']);
@@ -65,7 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
         Route::post('/saveEquipment', [EquipmentController::class, 'createEquipment']);
-        Route::get('/getAllEquipments', [EquipmentController::class, 'readAllEquipments']);
+        Route::get('/getEquipments', [EquipmentController::class, 'readAllEquipments']);
         Route::get('/getEquipment/{id}', [EquipmentController::class, 'readEquipment']);
         Route::post('/updateEquipment/{id}', [EquipmentController::class, 'updateEquipment']);
         Route::delete('/deleteEquipment/{id}', [EquipmentController::class, 'deleteEquipment']);
