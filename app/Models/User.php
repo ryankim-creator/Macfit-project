@@ -63,26 +63,26 @@ class User extends Authenticatable
         return $this->role->id === 1;
     
     }
-    public function isUser(){
-        return $this->role->id === 2;
+//     public function isUser(){
+//         return $this->role->id === 2;
     
-    }
-    public function isTrainer(){
-        return $this->role->id === 3;
+//     }
+//     public function isTrainer(){
+//         return $this->role->id === 3;
     
-    }
-    public function isStaff(){
-        return $this->role->id === 4;
+//     }
+//     public function isStaff(){
+//         return $this->role->id === 4;
     
-    }
+//     }
 
-public function abilities(){
+// public function abilities(){
 
-        return[
-          'admin' => $this->isAdmin(),
-          'user' => $this->isUser(),
-          'trainer' => $this->isTrainer(),
-          'staff' => $this->isStaff(),
-        ];
-}
+//         return[
+//           'admin' => $this->isAdmin(),
+//           'user' => $this->isUser(),
+//           'trainer' => $this->isTrainer(),
+//           'staff' => $this->isStaff(),
+//         ];
+// }
 }
